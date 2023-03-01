@@ -1,7 +1,8 @@
-import pathlib
 import sys
 
-input_validators = pathlib.Path('tasks').glob('*/input_validator.py')
+from paths import tasks_path
+
+input_validators = tasks_path.glob('*/input_validator.py')
 
 invalid_inputs = []
 
