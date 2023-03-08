@@ -95,7 +95,7 @@ prompt = FewShotPromptTemplate(
 llm_chain = LLMChain(prompt=prompt, llm=llm)
 
 
-class OpenAiExecutor(Executor):
+class PythonOpenAiExecutor(Executor):
     def __init__(self):
         pass
 

@@ -4,6 +4,7 @@ from execution_pipeline.languages import get_language
 from execution_pipeline.types import CodeFile, Task, TestResult, TaskRunner
 from paths import tasks_path
 
+
 class DefaultPipeline:
     def __init__(self, task_runner: TaskRunner):
         self.task_runner = task_runner
