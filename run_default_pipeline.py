@@ -8,7 +8,7 @@ from execution_pipeline.pipelines.default_pipeline import DefaultPipeline
 from execution_pipeline.task_runners.default_task_runner import DefaultTaskRunner
 
 code_executor_mapping = {SupportedLanguage.PYTHON: PythonExecutor()}
-llm_executor_mapping = {SupportedLanguage.PYTHON: PythonOpenAiExecutor()}
+llm_executor_mapping = {SupportedLanguage.PYTHON: [PythonOpenAiExecutor()]}
 
 task_runner = DefaultTaskRunner(code_executor_mapping, llm_executor_mapping, StrippedExactMatch())
 

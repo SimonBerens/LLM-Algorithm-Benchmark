@@ -1,17 +1,25 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 
 from execution_pipeline.languages import SupportedLanguage
 
 
+class Executor(ABC):
+
+    @abstractmethod
+    def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
+        pass
+
+
 @dataclass
 class SubtestResult:
-    input_path: Path
     language: SupportedLanguage
+    input_path: Path
     code_path: Path
+    llm_executor: Executor
     predicted_output: str
-    generated_output: str
+    code_output: str
     correctly_predicted: bool
 
 
@@ -38,11 +46,7 @@ class Task:
     metadata: dict
 
 
-class Executor(ABC):
-    def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
-        pass
-
-
 class TaskRunner(ABC):
+    @abstractmethod
     def run(self, task: Task) -> TestResult:
         pass
