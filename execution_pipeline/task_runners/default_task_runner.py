@@ -29,7 +29,7 @@ class DefaultTaskRunner(TaskRunner):
                                             correctly_predicted=correctly_predicted)
                     subtests.append(subtest)
 
-        num_correctly_predicted = sum(map(lambda x: x.correctly_predicted, subtests))
+        num_correctly_predicted = sum(map(lambda subtest: subtest.correctly_predicted, subtests))
         num_failed = len(subtests) - num_correctly_predicted
         return TestResult(path=task.dir_path, metadata=task.metadata, subtest_results=subtests,
                           num_correctly_predicted=num_correctly_predicted, num_failed=num_failed)
