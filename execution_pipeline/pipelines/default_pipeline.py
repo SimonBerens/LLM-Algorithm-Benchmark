@@ -1,4 +1,5 @@
 import json
+from asyncio import gather
 
 from execution_pipeline.languages import get_language
 from execution_pipeline.types import CodeFile, Task, TestResult, TaskRunner
@@ -9,7 +10,7 @@ class DefaultPipeline:
     def __init__(self, task_runner: TaskRunner):
         self.task_runner = task_runner
 
-    def run(self) -> list[TestResult]:
+    async def run(self) -> list[TestResult]:
         tasks = []
 
         for code_dir in tasks_path.glob('*/code'):
@@ -21,6 +22,6 @@ class DefaultPipeline:
                 Task(dir_path=code_dir, input_paths=input_paths, code_files=code_files,
                      metadata=metadata))
 
-        test_results = list(map(self.task_runner.run, tasks))
+        test_results = list(await gather(*map(self.task_runner.run, tasks)))
 
         return test_results

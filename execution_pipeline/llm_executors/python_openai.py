@@ -1,4 +1,5 @@
 import inspect
+from asyncio import gather
 from pathlib import Path
 
 from langchain import LLMChain
@@ -103,11 +104,11 @@ class PythonOpenAiExecutor(Executor):
     def __init__(self):
         pass
 
-    def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
-        execution_results = []
+    async def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
+        execution_coroutines = []
         python_code = code_path.read_text()
         for input_path in input_paths:
             input_text = input_path.read_text()
-            execution_result = llm_chain.run(python_code=python_code, input_text=input_text)
-            execution_results.append(execution_result)
-        return execution_results
+            execution_coroutine = llm_chain.arun(python_code=python_code, input_text=input_text)
+            execution_coroutines.append(execution_coroutine)
+        return list(await gather(*execution_coroutines))

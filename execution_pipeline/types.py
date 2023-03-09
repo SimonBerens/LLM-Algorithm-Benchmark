@@ -12,7 +12,7 @@ class Executor(ABC):
         pass
 
     @abstractmethod
-    def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
+    async def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
         pass
 
 
@@ -52,5 +52,5 @@ class Task:
 
 class TaskRunner(ABC):
     @abstractmethod
-    def run(self, task: Task) -> TestResult:
+    async def run(self, task: Task) -> TestResult:
         pass

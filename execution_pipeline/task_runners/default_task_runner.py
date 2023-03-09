@@ -1,3 +1,5 @@
+from asyncio import gather
+
 from execution_pipeline.languages import SupportedLanguage
 from execution_pipeline.types import Task, TestResult, SubtestResult, Executor, TaskRunner
 
@@ -9,13 +11,15 @@ class DefaultTaskRunner(TaskRunner):
         self.llm_executor_mapping = llm_executor_mapping
         self.evaluator = evaluator
 
-    def run(self, task: Task) -> TestResult:
+    async def run(self, task: Task) -> TestResult:
         subtests = []
         for code_file in task.code_files:
-            code_execution_results = self.code_executor_mapping[code_file.lang].execute(code_file.path,
-                                                                                        task.input_paths)
-            per_llm_execution_results = map(lambda llm_executor: llm_executor.execute(code_file.path, task.input_paths),
-                                            self.llm_executor_mapping[code_file.lang])
+            code_execution_results = await self.code_executor_mapping[code_file.lang].execute(code_file.path,
+                                                                                              task.input_paths)
+            per_llm_execution_results = await gather(
+                *[llm_executor.execute(code_file.path, task.input_paths) for llm_executor in
+                  self.llm_executor_mapping[code_file.lang]])
+
             for llm_executor_index, llm_execution_results in enumerate(per_llm_execution_results):
                 for input_path, code_execution_result, llm_execution_result in zip(task.input_paths,
                                                                                    code_execution_results,

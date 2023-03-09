@@ -1,7 +1,15 @@
-import subprocess
+from asyncio import subprocess, gather
+from functools import partial
 from pathlib import Path
 
 from execution_pipeline.types import Executor
+
+
+async def execute_single_input(code_path: Path, input_path: Path) -> str:
+    with open(input_path, "r") as f:
+        subprocess_result = await subprocess.create_subprocess_exec(f"python", code_path, stdin=f,
+                                                                    stdout=subprocess.PIPE)
+        return (await subprocess_result.stdout.read()).decode('utf-8')
 
 
 class PythonExecutor(Executor):
@@ -12,12 +20,5 @@ class PythonExecutor(Executor):
     def __init__(self):
         pass
 
-    def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
-        execution_results = []
-        for input_path in input_paths:
-            with open(input_path, "r") as f:
-                subprocess_result = subprocess.run(["python", str(code_path)], stdin=f,
-                                                   stdout=subprocess.PIPE,
-                                                   encoding="utf-8")
-                execution_results.append(subprocess_result.stdout)
-        return execution_results
+    async def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
+        return list(await gather(*map(partial(execute_single_input, code_path), input_paths)))
