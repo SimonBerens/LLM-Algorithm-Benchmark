@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 class SupportedLanguage(Enum):
-    PYTHON = auto()
+    PYTHON = "python"
 
 
 def get_language(file_name: Path):
