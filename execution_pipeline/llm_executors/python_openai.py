@@ -96,6 +96,10 @@ llm_chain = LLMChain(prompt=prompt, llm=llm)
 
 
 class PythonOpenAiExecutor(Executor):
+    @property
+    def name(self) -> str:
+        return "llm_executor_python_openai"
+
     def __init__(self):
         pass
 

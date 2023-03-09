@@ -5,6 +5,10 @@ from execution_pipeline.types import Executor
 
 
 class PythonExecutor(Executor):
+    @property
+    def name(self) -> str:
+        return "code_executor_python"
+
     def __init__(self):
         pass
 

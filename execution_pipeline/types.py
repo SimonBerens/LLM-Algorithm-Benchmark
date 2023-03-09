@@ -6,6 +6,10 @@ from execution_pipeline.languages import SupportedLanguage
 
 
 class Executor(ABC):
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        pass
 
     @abstractmethod
     def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
