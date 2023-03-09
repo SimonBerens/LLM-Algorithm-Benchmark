@@ -1,9 +1,6 @@
-V = int(input())
+V, E = map(int, input().split())
 
-for u in range(V):
-    E = int(input())
-    if E:
-        l = list(map(int, input().split()))
-        assert len(l) == E
-        for v in l:
-            assert 0 <= v < V
+for _ in range(E):
+    u, v = map(int, input().split())
+    assert 0 <= u < V
+    assert 0 <= v < V

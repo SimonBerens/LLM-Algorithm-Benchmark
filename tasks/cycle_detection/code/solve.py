@@ -1,9 +1,8 @@
-V = int(input())
+V, E = map(int, input().split())
 g = [[] for _ in range(V)]
-for u in range(V):
-    E = int(input())
-    if E:
-        g[u] = list(map(int, input().split()))
+for _ in range(E):
+    u, v = map(int, input().split())
+    g[u].append(v)
 
 status = [0] * V
 
