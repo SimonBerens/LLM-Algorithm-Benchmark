@@ -7,7 +7,7 @@ from execution_pipeline.languages import SupportedLanguage
 from execution_pipeline.llm_executors.python_openai import PythonOpenAiExecutor
 from execution_pipeline.pipelines.default_pipeline import DefaultPipeline
 from execution_pipeline.task_runners.default_task_runner import DefaultTaskRunner
-from wrtier import write_test_results
+from writer import write_test_results
 
 code_executor_mapping = {SupportedLanguage.PYTHON: PythonExecutor()}
 llm_executor_mapping = {SupportedLanguage.PYTHON: [PythonOpenAiExecutor()]}

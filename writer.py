@@ -36,10 +36,7 @@ def get_json_test_results(test_results: list[TestResult]):
         res_json["code_file_strs"][get_key_from_path(code_path)] = code_path.read_text()
 
     for test_result in test_results:
-        res_json["task_infos"][get_key_from_path(test_result.path)] = {
-            "name": test_result.path.stem,
-            "metadata": test_result.metadata
-        }
+        res_json["task_infos"][get_key_from_path(test_result.path)] = test_result.metadata
         for subtest_result in test_result.subtest_results:
             res_json["results"].append({
                 "task_info_key": get_key_from_path(test_result.path),
