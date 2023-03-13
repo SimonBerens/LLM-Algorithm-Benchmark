@@ -51,7 +51,7 @@ function Row({llmName, predictions, rawResults, inputTexts}: RowProps) {
                 <TableCell component="th" scope="row">
                     {llmName}
                 </TableCell>
-                {predictions.map(({correct, total}) => <TableCell align="right">{correct} / {total}</TableCell>)}
+                {predictions.map(({correct, total}, index) => <TableCell align="right" key={index}>{correct} / {total}</TableCell>)}
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -133,7 +133,7 @@ export function CollapsibleTable({fileJson}: CollapsibleTableProps) {
                         <TableCell>LLM</TableCell>
                         <TableCell align="right">Total</TableCell>
                         {Object.keys(fileJson.task_infos).map(key => (
-                            <TableCell align="right">{key}</TableCell>
+                            <TableCell key={key} align="right">{key}</TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
@@ -143,7 +143,7 @@ export function CollapsibleTable({fileJson}: CollapsibleTableProps) {
                         const totalStats = getTotalStats(llmPredictions)
                         const rawResults = perLlmStats[llmName]!.rawResults
                         return (
-                            <Row llmName={llmName} predictions={[totalStats, ...llmPredictions]}
+                            <Row key={llmName} llmName={llmName} predictions={[totalStats, ...llmPredictions]}
                                  rawResults={rawResults} inputTexts={fileJson.input_texts}/>
                         )
                     })}
