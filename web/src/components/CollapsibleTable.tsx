@@ -139,7 +139,7 @@ export function CollapsibleTable({fileJson}: CollapsibleTableProps) {
                 </TableHead>
                 <TableBody>
                     {llmNames.map(llmName => {
-                        let llmPredictions = Object.values(perLlmStats[llmName]!.taskSummaries);
+                        const llmPredictions = Object.values(perLlmStats[llmName]!.taskSummaries);
                         const totalStats = getTotalStats(llmPredictions)
                         const rawResults = perLlmStats[llmName]!.rawResults
                         return (
