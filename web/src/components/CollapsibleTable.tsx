@@ -51,7 +51,7 @@ function Row({llmName, predictions, rawResults, inputTexts}: RowProps) {
                 <TableCell component="th" scope="row">
                     {llmName}
                 </TableCell>
-                {predictions.map(({correct, total}, index) => <TableCell align="right" key={index}>{correct} / {total}</TableCell>)}
+                {predictions.map(({correct, total}, index) => <TableCell align="right" key={index}>{(correct / total * 100).toFixed(0)}% ({correct}/{total})</TableCell>)}
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
