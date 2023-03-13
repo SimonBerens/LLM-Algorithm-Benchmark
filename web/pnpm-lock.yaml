@@ -12,6 +12,7 @@ specifiers:
   '@types/react-dom': ^18.0.11
   '@typescript-eslint/eslint-plugin': ^5.53.0
   '@typescript-eslint/parser': ^5.53.0
+  '@vercel/analytics': ^0.1.11
   autoprefixer: ^10.4.7
   eslint: ^8.34.0
   eslint-config-next: ^13.2.1
@@ -32,6 +33,7 @@ dependencies:
   '@emotion/styled': 11.10.6_oouaibmszuch5k64ms7uxp2aia
   '@mui/icons-material': 5.11.11_ao76n7r2cajsoyr3cbwrn7geoi
   '@mui/material': 5.11.12_xqeqsl5kvjjtyxwyi3jhw3yuli
+  '@vercel/analytics': 0.1.11_react@18.2.0
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -925,6 +927,14 @@ packages:
       '@typescript-eslint/types': 5.54.1
       eslint-visitor-keys: 3.3.0
     dev: true
+
+  /@vercel/analytics/0.1.11_react@18.2.0:
+    resolution: {integrity: sha512-mj5CPR02y0BRs1tN3oZcBNAX9a8NxsIUl9vElDPcqxnMfP0RbRc9fI9Ud7+QDg/1Izvt5uMumsr+6YsmVHcyuw==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /acorn-jsx/5.3.2_acorn@8.8.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
