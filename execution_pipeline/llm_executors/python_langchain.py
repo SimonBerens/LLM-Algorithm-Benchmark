@@ -3,12 +3,10 @@ from asyncio import gather
 from pathlib import Path
 
 from langchain import LLMChain
-from langchain.llms import OpenAI
+from langchain.llms.base import LLM
 from langchain.prompts import PromptTemplate, FewShotPromptTemplate
 
 from execution_pipeline.types import Executor
-
-llm = OpenAI()
 
 examples = [
     {
@@ -93,22 +91,30 @@ prompt = FewShotPromptTemplate(
     input_variables=["python_code", "input_text"]
 )
 
-llm_chain = LLMChain(prompt=prompt, llm=llm)
 
+class PythonLangchainExecutor(Executor):
 
-class PythonOpenAiExecutor(Executor):
+    def __init__(self, llm: LLM, name: str, is_async: bool):
+        self.llm_chain = LLMChain(prompt=prompt, llm=llm)
+        self.is_async = is_async
+        self._name = name
+
     @property
     def name(self) -> str:
-        return "llm_executor_python_openai"
-
-    def __init__(self):
-        pass
+        return "llm_executor_python_langchain_" + self._name
 
     async def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
-        execution_coroutines = []
         python_code = code_path.read_text()
-        for input_path in input_paths:
-            input_text = input_path.read_text()
-            execution_coroutine = llm_chain.arun(python_code=python_code, input_text=input_text)
-            execution_coroutines.append(execution_coroutine)
-        return list(await gather(*execution_coroutines))
+        if self.is_async:
+            execution_coroutines = []
+            for input_path in input_paths:
+                input_text = input_path.read_text()
+                execution_coroutine = self.llm_chain.arun(python_code=python_code, input_text=input_text)
+                execution_coroutines.append(execution_coroutine)
+            return list(await gather(*execution_coroutines))
+        else:
+            execution_results = []
+            for input_path in input_paths:
+                input_text = input_path.read_text()
+                execution_results.append(self.llm_chain.run(python_code=python_code, input_text=input_text))
+            return execution_results

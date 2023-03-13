@@ -1,16 +1,29 @@
 import asyncio
 
+from langchain import OpenAI, Cohere
+
 import paths
 from execution_pipeline.code_exectuors.python_executor import PythonExecutor
 from execution_pipeline.evaluators.stripped_exact_match import StrippedExactMatch
 from execution_pipeline.languages import SupportedLanguage
-from execution_pipeline.llm_executors.python_openai import PythonOpenAiExecutor
+from execution_pipeline.llm_executors.python_chatgpt import PythonChatGptExecutor
+from execution_pipeline.llm_executors.python_langchain import PythonLangchainExecutor
 from execution_pipeline.pipelines.default_pipeline import DefaultPipeline
 from execution_pipeline.task_runners.default_task_runner import DefaultTaskRunner
 from writer import write_test_results
 
+llm_infos = [
+    [OpenAI(temperature=0), "openai", True],
+    [Cohere(model="command-xlarge-20221108", temperature=0), "cohere", False]
+]
+
+python_llm_executors = [
+    *[PythonLangchainExecutor(*llm_info) for llm_info in llm_infos],
+    PythonChatGptExecutor()
+]
+
 code_executor_mapping = {SupportedLanguage.PYTHON: PythonExecutor()}
-llm_executor_mapping = {SupportedLanguage.PYTHON: [PythonOpenAiExecutor()]}
+llm_executor_mapping = {SupportedLanguage.PYTHON: python_llm_executors}
 
 task_runner = DefaultTaskRunner(code_executor_mapping, llm_executor_mapping, StrippedExactMatch())
 
