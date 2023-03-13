@@ -19,3 +19,10 @@ To run the default pipeline, run `python run_default_pipeline.py`.
 To run the web server, run `cd web && pnpm dev`.
 
 To test the inputs, run `python validate_all_inputs.py`.
+
+
+### Environment Variables
+```bash
+OPENAI_API_KEY
+COHERE_API_KEY
+```
