@@ -52,9 +52,9 @@ function Row({llmName, predictions, rawResults}: RowProps) {
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{margin: 1}}>
                             <Typography variant="h6" gutterBottom component="div">
-                                All Results
+                                All results for {llmName}
                             </Typography>
-                            <Table size="small" aria-label="All Results">
+                            <Table size="small" aria-label={`All results for ${llmName}`}>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Task</TableCell>
