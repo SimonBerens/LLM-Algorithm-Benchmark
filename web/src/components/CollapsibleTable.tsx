@@ -13,6 +13,8 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {ResultsFile} from "@/schema";
+import {BasicModal} from "@/components/BasicModal";
+import {useState} from "react";
 
 type RawResults = ResultsFile["results"]
 
@@ -25,10 +27,14 @@ interface RowProps {
     llmName: string,
     predictions: TaskPrediction[]
     rawResults: RawResults
+    inputTexts: ResultsFile["input_texts"]
 }
 
-function Row({llmName, predictions, rawResults}: RowProps) {
-    const [open, setOpen] = React.useState(false);
+function Row({llmName, predictions, rawResults, inputTexts}: RowProps) {
+    const [collapsed, setCollapsed] = useState(true)
+    const [modalOpen, setModalOpen] = useState(false)
+    const [modalTitle, setModalTitle] = useState("")
+    const [modalBody, setModalBody] = useState("")
 
     return (
         <React.Fragment>
@@ -37,9 +43,9 @@ function Row({llmName, predictions, rawResults}: RowProps) {
                     <IconButton
                         aria-label="expand row"
                         size="small"
-                        onClick={() => setOpen(!open)}
+                        onClick={() => setCollapsed(!collapsed)}
                     >
-                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                        {!collapsed ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
@@ -49,7 +55,7 @@ function Row({llmName, predictions, rawResults}: RowProps) {
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
+                    <Collapse in={!collapsed} timeout="auto" unmountOnExit>
                         <Box sx={{margin: 1}}>
                             <Typography variant="h6" gutterBottom component="div">
                                 All results for {llmName}
@@ -71,13 +77,19 @@ function Row({llmName, predictions, rawResults}: RowProps) {
                                                 <TableCell component="th" scope="row">
                                                     {result.task_info_key}
                                                 </TableCell>
-                                                <TableCell>{result.input_text_key}</TableCell>
+                                                <button onClick={() => {
+                                                    setModalOpen(true)
+                                                    setModalTitle(result.input_text_key)
+                                                    setModalBody(inputTexts[result.input_text_key]!)
+                                                }}>
+                                                    <TableCell>{result.input_text_key}</TableCell>
+                                                </button>
                                                 <TableCell align="right">{result.predicted_output}</TableCell>
                                                 <TableCell align="right">{result.code_output}</TableCell>
                                                 <TableCell
                                                     align="right">{result.correctly_predicted ? "Yes" : "No"}</TableCell>
                                             </TableRow>
-                                        )
+                                        );
                                     })}
                                 </TableBody>
                             </Table>
@@ -85,6 +97,7 @@ function Row({llmName, predictions, rawResults}: RowProps) {
                     </Collapse>
                 </TableCell>
             </TableRow>
+            <BasicModal open={modalOpen} setOpen={setModalOpen} title={modalTitle} body={modalBody}/>
         </React.Fragment>
     );
 }
@@ -131,7 +144,7 @@ export function CollapsibleTable({fileJson}: CollapsibleTableProps) {
                         const rawResults = perLlmStats[llmName]!.rawResults
                         return (
                             <Row llmName={llmName} predictions={[totalStats, ...llmPredictions]}
-                                 rawResults={rawResults}/>
+                                 rawResults={rawResults} inputTexts={fileJson.input_texts}/>
                         )
                     })}
                 </TableBody>
