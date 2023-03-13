@@ -77,13 +77,11 @@ function Row({llmName, predictions, rawResults, inputTexts}: RowProps) {
                                                 <TableCell component="th" scope="row">
                                                     {result.task_info_key}
                                                 </TableCell>
-                                                <button onClick={() => {
+                                                <TableCell className="hover:cursor-pointer" onClick={() => {
                                                     setModalOpen(true)
                                                     setModalTitle(result.input_text_key)
                                                     setModalBody(inputTexts[result.input_text_key]!)
-                                                }}>
-                                                    <TableCell>{result.input_text_key}</TableCell>
-                                                </button>
+                                                }}>{result.input_text_key}</TableCell>
                                                 <TableCell align="right">{result.predicted_output}</TableCell>
                                                 <TableCell align="right">{result.code_output}</TableCell>
                                                 <TableCell
