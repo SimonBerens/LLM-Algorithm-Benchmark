@@ -28,9 +28,10 @@ interface RowProps {
     predictions: TaskPrediction[]
     rawResults: RawResults
     inputTexts: ResultsFile["input_texts"]
+    codeFiles: ResultsFile["code_file_strs"]
 }
 
-function Row({llmName, predictions, rawResults, inputTexts}: RowProps) {
+function Row({llmName, predictions, rawResults, inputTexts, codeFiles}: RowProps) {
     const [collapsed, setCollapsed] = useState(true)
     const [modalOpen, setModalOpen] = useState(false)
     const [modalTitle, setModalTitle] = useState("")
@@ -74,7 +75,11 @@ function Row({llmName, predictions, rawResults, inputTexts}: RowProps) {
                                     {rawResults.map((result) => {
                                         return (
                                             <TableRow key={result.task_info_key}>
-                                                <TableCell component="th" scope="row">
+                                                <TableCell component="th" scope="row" className="hover:cursor-pointer" onClick={() => {
+                                                    setModalOpen(true)
+                                                    setModalTitle(result.code_file_str_key)
+                                                    setModalBody(codeFiles[result.code_file_str_key]!)
+                                                }}>
                                                     {result.task_info_key}
                                                 </TableCell>
                                                 <TableCell className="hover:cursor-pointer" onClick={() => {
@@ -142,7 +147,7 @@ export function CollapsibleTable({fileJson}: CollapsibleTableProps) {
                         const rawResults = perLlmStats[llmName]!.rawResults
                         return (
                             <Row key={llmName} llmName={llmName} predictions={[totalStats, ...llmPredictions]}
-                                 rawResults={rawResults} inputTexts={fileJson.input_texts}/>
+                                 rawResults={rawResults} inputTexts={fileJson.input_texts} codeFiles={fileJson.code_file_strs}/>
                         )
                     })}
                 </TableBody>
