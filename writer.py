@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 
 import paths
@@ -45,6 +44,3 @@ def get_json_test_results(test_results: list[TestResult]):
     return res_json
 
 
-def write_test_results(test_results: list[TestResult], path: Path):
-    path.parent.mkdir(exist_ok=True, parents=True)
-    path.write_text(json.dumps(get_json_test_results(test_results)))

@@ -1,7 +1,7 @@
 import asyncio
+import json
 
-from langchain import OpenAI, Cohere
-
+from langchain import OpenAI
 import paths
 from execution_pipeline.code_exectuors.python_executor import PythonExecutor
 from execution_pipeline.evaluators.stripped_exact_match import StrippedExactMatch
@@ -10,7 +10,8 @@ from execution_pipeline.llm_executors.python_chatgpt import PythonChatGptExecuto
 from execution_pipeline.llm_executors.python_langchain import PythonLangchainExecutor
 from execution_pipeline.pipelines.default_pipeline import DefaultPipeline
 from execution_pipeline.task_runners.default_task_runner import DefaultTaskRunner
-from writer import write_test_results
+from utils import force_write_to
+from writer import get_json_test_results
 
 llm_infos = [
     [OpenAI(temperature=0), "openai", True],
@@ -31,5 +32,6 @@ task_runner = DefaultTaskRunner(code_executor_mapping, llm_executor_mapping, Str
 print("Running pipeline...")
 results = asyncio.run(DefaultPipeline(task_runner).run())
 print("Writing results...")
-write_test_results(results, paths.root_path.joinpath('results/result.json'))
+path = paths.root_path.joinpath('results/result.json')
+force_write_to(path, json.dumps(get_json_test_results(results)))
 print("Done!")
