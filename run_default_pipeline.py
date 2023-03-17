@@ -15,7 +15,7 @@ from writer import write_test_results
 llm_infos = [
     [OpenAI(temperature=0), "openai", True],
     [OpenAI(temperature=0, model_name="text-davinci-002"), "openai", True],
-    [Cohere(model="command-xlarge-20221108", temperature=0), "cohere", False]
+    [Cohere(model="command-xlarge-nightly", temperature=0), "cohere", False]
 ]
 
 python_llm_executors = [
