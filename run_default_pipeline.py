@@ -14,7 +14,7 @@ from writer import write_test_results
 
 llm_infos = [
     [OpenAI(temperature=0), "openai", True],
-    [OpenAI(temperature=0, model_name="text-davinci-002"), "openai", True],
+    [OpenAI(temperature=0, model_name="text-davinci-002"), "openai_davinci-002", True],
 ]
 
 python_llm_executors = [
