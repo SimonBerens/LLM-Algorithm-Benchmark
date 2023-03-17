@@ -28,9 +28,11 @@ class UnionFind:
 n, q = map(int, input().split())
 uf = UnionFind(n)
 
+res = []
 for _ in range(q):
     t, u, v = map(int, input().split())
     if t == 0:
         uf.merge(u, v)
     else:
-        print(uf.are_connected(u, v))
+        res.append(uf.are_connected(u, v))
+print(res)
