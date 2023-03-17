@@ -20,7 +20,8 @@ llm_infos = [
 
 python_llm_executors = [
     *[PythonLangchainExecutor(*llm_info) for llm_info in llm_infos],
-    PythonChatGptExecutor()
+    PythonChatGptExecutor(model_name="gpt-3.5-turbo"),
+    PythonChatGptExecutor(model_name="gpt-4"),
 ]
 
 code_executor_mapping = {SupportedLanguage.PYTHON: PythonExecutor()}

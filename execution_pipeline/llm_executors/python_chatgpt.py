@@ -104,23 +104,22 @@ for example in examples:
 messages.append(htemplate)
 
 
-chat = ChatOpenAI(temperature=0)
-llm_chain = LLMChain(llm=chat, prompt=ChatPromptTemplate.from_messages(messages))
-
 class PythonChatGptExecutor(Executor):
 
-    def __init__(self):
-        pass
+    def __init__(self, model_name):
+        self.model_name = model_name
+        chat = ChatOpenAI(temperature=0, model_name=model_name)
+        self.llm_chain = LLMChain(llm=chat, prompt=ChatPromptTemplate.from_messages(messages))
 
     @property
     def name(self) -> str:
-        return "llm_executor_python_chatgpt"
+        return "llm_executor_python_" + self.model_name
 
     async def execute(self, code_path: Path, input_paths: list[Path]) -> list[str]:
         python_code = code_path.read_text()
         execution_coroutines = []
         for input_path in input_paths:
             input_text = input_path.read_text()
-            execution_coroutine = llm_chain.arun(python_code=python_code, input_text=input_text)
+            execution_coroutine = self.llm_chain.arun(python_code=python_code, input_text=input_text)
             execution_coroutines.append(execution_coroutine)
         return list(await gather(*execution_coroutines))
